@@ -1,0 +1,14 @@
+away_3PM,away_FGA,away_FGM,away_FTA,away_FTM,away_abbreviation,away_away_records,away_display_name,away_home_records,away_score,away_total_records,date,home_3PM,home_FGA,home_FGM,home_FTA,home_FTM,home_abbreviation,home_away_records,home_display_name,home_home_records,home_score,home_total_records,id,regular_total_score,season_type,season_year,series_summary,status_period
+9,90,42,22,19,SA,16-3,San Antonio Spurs,11-4,112,27-7,2017-01-01T23:00Z,14,92,42,27,16,ATL,8-9,Atlanta Hawks,10-7,114,18-16,400899374,200.0,2,2017,,5
+9,86,42,22,14,DET,7-12,Detroit Pistons,9-8,107,16-20,2017-01-01T23:00Z,14,77,35,18,14,MIA,5-12,Miami Heat,5-13,98,10-25,400899381,205.0,2,2017,,4
+10,97,42,11,10,ORL,8-9,Orlando Magic,7-11,104,15-20,2017-01-01T23:00Z,9,86,43,24,22,IND,4-13,Indiana Pacers,13-5,117,17-18,400899383,221.0,2,2017,,4
+6,73,36,28,17,POR,6-14,Portland Trail Blazers,9-7,95,15-21,2017-01-02T00:00Z,7,87,35,18,12,MIN,5-11,Minnesota Timberwolves,6-12,89,11-23,400899385,184.0,2,2017,,4
+10,75,42,32,29,TOR,12-5,Toronto Raptors,11-5,123,23-10,2017-01-02T02:30Z,15,92,37,31,25,LAL,5-15,Los Angeles Lakers,7-10,114,12-25,400899387,237.0,2,2017,,4
+9,78,36,19,13,OKC,8-8,Oklahoma City Thunder,13-6,94,21-14,2017-01-03T00:00Z,7,79,38,24,15,MIL,6-9,Milwaukee Bucks,11-7,98,17-16,400899410,192.0,2,2017,,4
+11,88,32,10,7,NO,4-12,New Orleans Pelicans,10-10,82,14-22,2017-01-03T00:00Z,6,90,34,22,16,CLE,8-5,Cleveland Cavaliers,18-2,90,26-7,400899411,172.0,2,2017,,4
+7,93,39,20,16,UTAH,10-6,Utah Jazz,12-7,101,22-13,2017-01-03T00:30Z,6,78,33,23,17,BKN,1-16,Brooklyn Nets,7-9,89,8-25,400899413,190.0,2,2017,,4
+15,91,45,14,10,ORL,9-9,Orlando Magic,7-11,115,16-20,2017-01-03T00:30Z,8,83,39,24,17,NY,5-12,New York Knicks,11-6,103,16-18,400899414,218.0,2,2017,,4
+9,83,41,22,20,CHA,8-9,Charlotte Hornets,11-7,111,19-16,2017-01-03T01:00Z,7,90,42,29,27,CHI,6-11,Chicago Bulls,11-7,118,17-18,400899416,229.0,2,2017,,4
+6,87,38,12,9,WSH,3-11,Washington Wizards,13-6,91,16-17,2017-01-03T01:00Z,12,86,37,21,15,HOU,13-6,Houston Rockets,14-3,101,27-9,400899417,192.0,2,2017,,4
+2,102,39,22,18,PHX,4-16,Phoenix Suns,6-9,98,10-25,2017-01-03T03:30Z,7,79,37,38,28,LAC,11-8,LA Clippers,12-6,109,23-14,400899418,207.0,2,2017,,4
+9,101,48,18,14,DEN,7-11,Denver Nuggets,7-9,119,14-20,2017-01-03T03:30Z,11,95,50,21,16,GS,15-3,Golden State Warriors,15-2,127,30-5,400899419,246.0,2,2017,,4
