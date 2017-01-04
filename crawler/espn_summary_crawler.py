@@ -37,9 +37,9 @@ class EspnSummaryData(object):
                 m2 = re.match(r'.*Over/Under: (\d+)', odds_details)
                 if m2:
                     result_dict['over_under'] = float(m2.group(1))
-            game_flow = doc('#gameFlow-graph').attr('data-plays')
-            if game_flow:
-                result_dict['game_flow'] = eval(game_flow)
+        game_flow = doc('#gameFlow-graph').attr('data-plays')
+        if game_flow:
+            result_dict['game_flow'] = eval(game_flow)
         return result_dict
 
     def main(self, year):
