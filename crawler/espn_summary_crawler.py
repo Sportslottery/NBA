@@ -13,8 +13,12 @@ class EspnSummaryData(object):
     def __init__(self):
         self.data_path = os.path.dirname(__file__) + '/data/'
 
-    def get_id_list(self, year):
-        df = pd.read_csv(self.data_path + 'espn_api/' + '%d.csv' %(year, ))
+    def get_id_list(self, year, month=None):
+        if month:
+            file_name = self.data_path + 'espn_api/' + '%d%02d.csv' %(year, month, )
+        else:
+            file_name = self.data_path + 'espn_api/' + '%d.csv' %(year, )
+        df = pd.read_csv(file_name)
         id_list = df.id.tolist()
         return id_list
 
@@ -42,17 +46,21 @@ class EspnSummaryData(object):
             result_dict['game_flow'] = eval(game_flow)
         return result_dict
 
-    def main(self, year):
-        id_list = self.get_id_list(year)
+    def main(self, year, month=None):
+        id_list = self.get_id_list(year, month)
         tot = len(id_list)
         result_dict = {}
         for index, element in enumerate(id_list):
             url = 'http://www.espn.com/nba/game?gameId=%d' %(element, )
             print index, tot, url
             result_dict[str(element)] = self.get_espn_summary_data(url)
-        with open(self.data_path + 'espn_summary/%d.json' %(year, ), 'w') as fp:
+        if month:
+            file_name = self.data_path + 'espn_summary/%d%02d.json' %(year, month, )
+        else:
+            file_name = self.data_path + 'espn_summary/%d.json' %(year, )
+        with open(file_name, 'w') as fp:
             json.dump(result_dict, fp)
 
 if __name__ == "__main__":
     ESD = EspnSummaryData()
-    ESD.main(2016)
+    ESD.main(year=2015)
