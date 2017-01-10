@@ -23,21 +23,30 @@ class StandingDataProcessing(object):
         df = df.append(df_last_year)
         return df
 
+    def split_records(self, df, col_name, game_result):
+        if game_result == 'w':
+            idx = 0
+        else:
+            idx = -1
+        result_series = df[col_name].apply(lambda x: int(x.split('-')[idx]) if x != '-' else None)
+        return result_series
+
+
     def get_tmp_df(self, year):
         df = self.get_raw_data(year)
         df = df.fillna('-')
-        df['home_total_w'] = df.home_total_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['home_total_l'] = df.home_total_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
-        df['away_total_w'] = df.away_total_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['away_total_l'] = df.away_total_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
-        df['home_home_w'] = df.home_home_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['home_home_l'] = df.home_home_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
-        df['home_away_w'] = df.home_away_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['home_away_l'] = df.home_away_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
-        df['away_home_w'] = df.away_home_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['away_home_l'] = df.away_home_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
-        df['away_away_w'] = df.away_away_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
-        df['away_away_l'] = df.away_away_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
+        df['home_total_w'] = self.split_records(df, 'home_total_records', 'w')
+        df['home_total_l'] = self.split_records(df, 'home_total_records', 'l')
+        df['away_total_w'] = self.split_records(df, 'away_total_records', 'w')
+        df['away_total_l'] = self.split_records(df, 'away_total_records', 'l')
+        df['home_home_w'] = self.split_records(df, 'home_home_records', 'w')
+        df['home_home_l'] = self.split_records(df, 'home_home_records', 'l')
+        df['home_away_w'] = self.split_records(df, 'home_away_records', 'w')
+        df['home_away_l'] = self.split_records(df, 'home_away_records', 'l')
+        df['away_home_w'] = self.split_records(df, 'away_home_records', 'w')
+        df['away_home_l'] = self.split_records(df, 'away_home_records', 'l')
+        df['away_away_w'] = self.split_records(df, 'away_away_records', 'w')
+        df['away_away_l'] = self.split_records(df, 'away_away_records', 'l')
 
         df['home_total_w_i'] = np.where(df['home_total_w'].isnull(), None,
                                 np.where(df['season_type'] == 3, df['home_total_w'],
@@ -83,20 +92,6 @@ class StandingDataProcessing(object):
         df['away_home_w_i'] = df['away_home_w']
         df['away_home_l_i'] = df['away_home_l']
         return df
-
-    def get_init_standing(self, df, col):
-        if re.findall('(_w$)', col):
-            result_std = np.where(df[col].isnull(), None,
-                         np.where(df['season_type'] == 3, df[col],
-                         np.where(df['home_score'] > df['away_score'], df['home_total_w'] - 1,
-                            df['home_total_w'])))
-
-
-    np.where(df['home_total_w'].isnull(), None,
-             np.where(df['season_type'] == 3, df['home_total_w'],
-             np.where(df['home_score'] > df['away_score'], df['home_total_w'] - 1,
-                      df['home_total_w'])))
-
 
     def main(self, year):
         result_df = pd.DataFrame()
