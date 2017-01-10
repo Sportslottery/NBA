@@ -1,6 +1,7 @@
 __author__ = 'shane'
 
 import os
+import re
 
 import numpy as np
 import pandas as pd
@@ -37,20 +38,64 @@ class StandingDataProcessing(object):
         df['away_home_l'] = df.away_home_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
         df['away_away_w'] = df.away_away_records.apply(lambda x: int(x.split('-')[0]) if x != '-' else None)
         df['away_away_l'] = df.away_away_records.apply(lambda x: int(x.split('-')[-1]) if x != '-' else None)
+
+        df['home_total_w_i'] = np.where(df['home_total_w'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['home_total_w'],
+                                np.where(df['home_score'] > df['away_score'], df['home_total_w'] - 1,
+                                df['home_total_w'])))
+
+        df['home_home_w_i'] = np.where(df['home_home_w'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['home_home_w'],
+                                np.where(df['home_score'] > df['away_score'], df['home_home_w'] - 1,
+                                df['home_home_w'])))
+
+        df['away_total_l_i'] = np.where(df['away_total_l'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['away_total_l'],
+                                np.where(df['home_score'] > df['away_score'], df['away_total_l'] - 1,
+                                df['away_total_l'])))
+
+        df['away_away_l_i'] = np.where(df['away_away_l'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['away_away_l'],
+                                np.where(df['home_score'] > df['away_score'], df['away_away_l'] - 1,
+                                df['away_away_l'])))
+
+        df['away_total_w_i'] = np.where(df['away_total_w'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['away_total_w'],
+                                np.where(df['home_score'] < df['away_score'], df['away_total_w'] - 1,
+                                df['away_total_w'])))
+
+        df['away_away_w_i'] = np.where(df['away_away_w'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['away_away_w'],
+                                np.where(df['home_score'] < df['away_score'], df['away_away_w'] - 1,
+                                df['away_away_w'])))
+
+        df['home_total_l_i'] = np.where(df['home_total_l'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['home_total_l'],
+                                np.where(df['home_score'] < df['away_score'], df['home_total_l'] - 1,
+                                df['home_total_l'])))
+
+        df['home_home_l_i'] = np.where(df['home_home_l'].isnull(), None,
+                                np.where(df['season_type'] == 3, df['home_home_l'],
+                                np.where(df['home_score'] < df['away_score'], df['home_home_l'] - 1,
+                                df['home_home_l'])))
+        df['home_away_w_i'] = df['home_away_w']
+        df['home_away_l_i'] = df['home_away_l']
+        df['away_home_w_i'] = df['away_home_w']
+        df['away_home_l_i'] = df['away_home_l']
         return df
 
-    def get_init_standing(row, df):
-        if not df['home_total_w']:
-            init_result = None
-        elif df['season_type'] == 3:
-            init_result = int(df['home_total_w'])
-        else:
-            if df['home_score'] > df['away_score']:
-                init_result = int(df['home_total_w']) - 1
-            else:
-                init_result = int(df['home_total_w'])
-        return init_result
+    def get_init_standing(self, df, col):
+        if re.findall('(_w$)', col):
+            result_std = np.where(df[col].isnull(), None,
+                         np.where(df['season_type'] == 3, df[col],
+                         np.where(df['home_score'] > df['away_score'], df['home_total_w'] - 1,
+                            df['home_total_w'])))
 
+
+    np.where(df['home_total_w'].isnull(), None,
+             np.where(df['season_type'] == 3, df['home_total_w'],
+             np.where(df['home_score'] > df['away_score'], df['home_total_w'] - 1,
+                      df['home_total_w'])))
 
 
     def main(self, year):
