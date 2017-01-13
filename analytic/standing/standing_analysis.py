@@ -25,7 +25,7 @@ df = pd.merge(api_df, standing_df, on='id', how='left')
 df['line_margin'] = df['id'].apply(lambda x: summary_dict.get(str(x), {}).get('line_margin'))
 df['line_team'] = df['id'].apply(lambda x: summary_dict.get(str(x), {}).get('line_team'))
 
-def f(x):
+def get_pct(x):
     tot = x[0] + x[1]
     if tot == 0:
         pct = None
@@ -33,4 +33,16 @@ def f(x):
         pct = float(x[0])/float(tot)
     return pct
 
-df[['home_total_w_i','home_total_l_i']].apply(f, axis=1).tolist()
+df['home_total_pct'] = df[['home_total_w_i','home_total_l_i']].apply(get_pct, axis=1)
+
+df['away_total_pct'] = df[['away_total_w_i','away_total_l_i']].apply(get_pct, axis=1)
+
+df['home_home_pct'] = df[['home_home_w_i','home_home_l_i']].apply(get_pct, axis=1)
+
+df['home_away_pct'] = df[['home_away_w_i','home_away_l_i']].apply(get_pct, axis=1)
+
+df['away_away_pct'] = df[['away_away_w_i','away_away_l_i']].apply(get_pct, axis=1)
+
+df['away_home_pct'] = df[['away_home_w_i','away_home_l_i']].apply(get_pct, axis=1)
+
+df['two_way_winner'] = df[['away_score','home_score']].apply(lambda x: 'away' if x[0] > x[1] else 'home', axis=1)
