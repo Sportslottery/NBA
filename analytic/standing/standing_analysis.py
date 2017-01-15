@@ -17,7 +17,8 @@ best_away_winning_pct = float(34)/float(41)
 year = 2016
 
 api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ), usecols=['id', 'away_abbreviation', 'home_abbreviation',
-                                                                       'away_score', 'home_score', 'season_type'])
+                                                                       'away_score', 'home_score', 'season_type',
+                                                                               'regular_total_score'])
 
 standing_df = pd.read_csv('F:/NBA/data_processing/standing/data/%d.csv' %(year, ))
 
@@ -53,6 +54,9 @@ df['away_home_pct'] = df[['away_home_w_i','away_home_l_i']].apply(get_pct, axis=
 
 df['two_way_winner'] = df[['away_score','home_score']].apply(lambda x: 'away' if x[0] > x[1] else 'home', axis=1)
 
+
+df['over_under'] = df[['regular_total_score', 'over_under']].apply(lambda x: 'over' if x[0] > x[1] else
+                                    'under' if x[0] < x[1] else 'tie', axis=1)
 # def get_line_winner(handicap_team, line_margin):
 
 
