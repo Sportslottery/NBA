@@ -29,6 +29,8 @@ df['line_margin'] = df['id'].apply(lambda x: 0 if summary_dict.get(str(x), {}).g
                                                 summary_dict.get(str(x), {}).get('line_margin'))
 df['line_team'] = df['id'].apply(lambda x: summary_dict.get(str(x), {}).get('line_team'))
 
+df['over_under'] = df['id'].apply(lambda x: summary_dict.get(str(x), {}).get('over_under'))
+
 def get_pct(x):
     tot = x[0] + x[1]
     if tot == 0:
@@ -66,4 +68,10 @@ tmp_df['away_adjust_score'] = np.where(tmp_df['line_team'] == tmp_df['away_abbre
                                             tmp_df['away_score'] + tmp_df['line_margin'], tmp_df['away_score'])
 
 tmp_df['handicap_winner'] = tmp_df[['away_adjust_score','home_adjust_score']].apply(lambda x: 'away' if x[0] > x[1] else
-                                    'home', axis=1)
+                                    'home' if x[0] < x[1] else 'tie', axis=1)
+
+tmp_df[['id', 'handicap_winner']].to_dict()
+
+df = pd.merge(df, tmp_df[['id', 'handicap_winner']], on='id', how='left')
+
+df.to_csv('a.csv', index=None)
