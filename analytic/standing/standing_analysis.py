@@ -14,7 +14,7 @@ best_home_winning_pct = float(40)/float(41)
 worst_away_winning_pct = float(1)/float(41)
 best_away_winning_pct = float(34)/float(41)
 
-year = 2016
+year = 2008
 
 api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ), usecols=['id', 'away_abbreviation', 'home_abbreviation',
                                                                        'away_score', 'home_score', 'season_type',
@@ -55,27 +55,39 @@ df['away_home_pct'] = df[['away_home_w_i','away_home_l_i']].apply(get_pct, axis=
 df['two_way_winner'] = df[['away_score','home_score']].apply(lambda x: 'away' if x[0] > x[1] else 'home', axis=1)
 
 
-df['over_under'] = df[['regular_total_score', 'over_under']].apply(lambda x: 'over' if x[0] > x[1] else
+df['over_under_result'] = df[['regular_total_score', 'over_under']].apply(lambda x: None if x[1] == None else 'over' if x[0] > x[1] else
                                     'under' if x[0] < x[1] else 'tie', axis=1)
-# def get_line_winner(handicap_team, line_margin):
 
 
 tmp_df = df.loc[:, ['id', 'away_abbreviation', 'away_score', 'home_abbreviation', 'home_score', 'line_margin',
                     'line_team', 'two_way_winner']]
 tmp_df = tmp_df[tmp_df.line_margin.notnull()]
 
-
-tmp_df['home_adjust_score'] = np.where(tmp_df['line_team'] == tmp_df['home_abbreviation'],
+if tmp_df.shape[0] != 0:
+    tmp_df['home_adjust_score'] = np.where(tmp_df['line_team'] == tmp_df['home_abbreviation'],
                                             tmp_df['home_score'] + tmp_df['line_margin'], tmp_df['home_score'])
 
-tmp_df['away_adjust_score'] = np.where(tmp_df['line_team'] == tmp_df['away_abbreviation'],
+    tmp_df['away_adjust_score'] = np.where(tmp_df['line_team'] == tmp_df['away_abbreviation'],
                                             tmp_df['away_score'] + tmp_df['line_margin'], tmp_df['away_score'])
 
-tmp_df['handicap_winner'] = tmp_df[['away_adjust_score','home_adjust_score']].apply(lambda x: 'away' if x[0] > x[1] else
+    tmp_df['handicap_winner'] = tmp_df[['away_adjust_score','home_adjust_score']].apply(lambda x: 'away' if x[0] > x[1] else
                                     'home' if x[0] < x[1] else 'tie', axis=1)
 
-tmp_df[['id', 'handicap_winner']].to_dict()
 
-df = pd.merge(df, tmp_df[['id', 'handicap_winner']], on='id', how='left')
+    df = pd.merge(df, tmp_df[['id', 'handicap_winner']], on='id', how='left')
 
-df.to_csv('a.csv', index=None)
+    df = df.loc[:, ['id', 'season_type', u'home_total_w_i', u'home_home_w_i', u'away_total_l_i',
+       u'away_away_l_i', u'away_total_w_i', u'away_away_w_i',
+       u'home_total_l_i', u'home_home_l_i', u'home_away_w_i', u'home_away_l_i', u'line_margin',
+           u'over_under', u'home_total_pct', u'away_total_pct', u'home_home_pct',
+       u'home_away_pct', u'away_away_pct', u'away_home_pct', u'two_way_winner',
+       u'handicap_winner', 'over_under_result']]
+else:
+    df = df.loc[:, ['id', 'season_type', u'home_total_w_i', u'home_home_w_i', u'away_total_l_i',
+       u'away_away_l_i', u'away_total_w_i', u'away_away_w_i',
+       u'home_total_l_i', u'home_home_l_i', u'home_away_w_i', u'home_away_l_i', u'line_margin',
+           u'over_under', u'home_total_pct', u'away_total_pct', u'home_home_pct',
+       u'home_away_pct', u'away_away_pct', u'away_home_pct', u'two_way_winner'
+      , 'over_under_result']]
+
+df.to_csv('%d.csv' %year, index=None)
