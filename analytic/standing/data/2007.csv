@@ -1,4 +1,4 @@
-id,season_type,home_total_w_i,home_home_w_i,away_total_l_i,away_away_l_i,away_total_w_i,away_away_w_i,home_total_l_i,home_home_l_i,home_away_w_i,home_away_l_i,line_margin,over_under,home_total_pct,away_total_pct,home_home_pct,home_away_pct,away_away_pct,away_home_pct,two_way_winner,over_under_result
+id,season_type,home_total_w_i,home_home_w_i,away_total_l_i,away_away_l_i,away_total_w_i,away_away_w_i,home_total_l_i,home_home_l_i,home_away_w_i,home_away_l_i,home_line_margin,over_under,home_total_pct,away_total_pct,home_home_pct,home_away_pct,away_away_pct,away_home_pct,two_way_winner,over_under_result
 270101022,2,13.0,7.0,19.0,9.0,10.0,6.0,18.0,8.0,6.0,10.0,,,0.41935483871,0.344827586207,0.466666666667,0.375,0.4,0.285714285714,away,
 270101030,2,9.0,6.0,15.0,10.0,13.0,5.0,21.0,10.0,3.0,11.0,,,0.3,0.464285714286,0.375,0.214285714286,0.333333333333,0.615384615385,away,
 270102003,2,12.0,7.0,16.0,11.0,16.0,3.0,18.0,6.0,5.0,12.0,,,0.4,0.5,0.538461538462,0.294117647059,0.214285714286,0.722222222222,away,
