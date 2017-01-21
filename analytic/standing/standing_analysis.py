@@ -8,28 +8,28 @@ import json
 import pandas as pd
 import numpy as np
 
-worst_season_winning_pct = float(7)/float(66)
-best_season_winning_pct = float(73)/float(82)
+# worst_season_winning_pct = float(7)/float(66)
+# best_season_winning_pct = float(73)/float(82)
+#
+# worst_home_winning_pct = float(4)/float(33)
+# best_home_winning_pct = float(40)/float(41)
+#
+# worst_away_winning_pct = float(1)/float(41)
+# best_away_winning_pct = float(34)/float(41)
 
-worst_home_winning_pct = float(4)/float(33)
-best_home_winning_pct = float(40)/float(41)
-
-worst_away_winning_pct = float(1)/float(41)
-best_away_winning_pct = float(34)/float(41)
-
-
+proj_dict =  os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 year = int(sys.argv[1])
 
 
-api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ),
+api_df = pd.read_csv('%s/crawler/data/espn_api/%d.csv' %(proj_dict, year, ),
                      usecols=['id', 'away_abbreviation', 'home_abbreviation', 'season_year',
                                                                        'away_score', 'home_score', 'season_type',
                                                                                'regular_total_score'])
 
-standing_df = pd.read_csv('F:/NBA/data_processing/standing/data/%d.csv' %(year, ))
+standing_df = pd.read_csv('%s/data_processing/standing/data/%d.csv' %(proj_dict, year, ))
 
-summary_dict = json.load(open('F:/NBA/crawler/data/espn_summary/%d.json' %(year, ), 'r'))
+summary_dict = json.load(open('%s/crawler/data/espn_summary/%d.json' %(proj_dict, year, ), 'r'))
 
 df = pd.merge(api_df, standing_df, on='id', how='left')
 
