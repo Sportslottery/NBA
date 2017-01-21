@@ -1,6 +1,9 @@
 __author__ = 'shane'
 
+import os
+import sys
 import json
+
 
 import pandas as pd
 import numpy as np
@@ -14,9 +17,13 @@ best_home_winning_pct = float(40)/float(41)
 worst_away_winning_pct = float(1)/float(41)
 best_away_winning_pct = float(34)/float(41)
 
-year = 2007
 
-api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ), usecols=['id', 'away_abbreviation', 'home_abbreviation',
+
+year = int(sys.argv[1])
+
+
+api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ),
+                     usecols=['id', 'away_abbreviation', 'home_abbreviation', 'season_year',
                                                                        'away_score', 'home_score', 'season_type',
                                                                                'regular_total_score'])
 
@@ -93,4 +100,4 @@ else:
        u'home_away_pct', u'away_away_pct', u'away_home_pct', u'two_way_winner'
       , 'over_under_result']]
 
-df.to_csv('%d.csv' %year, index=None)
+df.to_csv(os.path.dirname(__file__) + '/data/' + '%d.csv' %year, index=None)
