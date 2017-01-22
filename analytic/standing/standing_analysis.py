@@ -17,7 +17,7 @@ import numpy as np
 # worst_away_winning_pct = float(1)/float(41)
 # best_away_winning_pct = float(34)/float(41)
 
-proj_dict =  os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+proj_dict = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 year = int(sys.argv[1])
 
