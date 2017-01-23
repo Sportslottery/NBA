@@ -1,7 +1,6 @@
 __author__ = 'shane'
 
 import os
-import re
 
 import numpy as np
 import pandas as pd
@@ -113,6 +112,7 @@ class StandingDataProcessing(object):
 
 if __name__ == "__main__":
     SDP = StandingDataProcessing()
-    df = SDP.main(2016)
+
+    df = SDP.main(year=2017, month=1)
     # print df
 
