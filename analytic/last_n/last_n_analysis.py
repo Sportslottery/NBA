@@ -1,5 +1,6 @@
 __author__ = 'shane'
 
+import os
 import time
 import json
 from datetime import datetime
@@ -9,10 +10,12 @@ import pandas as pd
 import numpy as np
 
 
+proj_dict = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
 data = pd.DataFrame()
 
-for year in range(2016, 2017):
-    api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ),
+for year in range(2006, 2017):
+    api_df = pd.read_csv('%s/crawler/data/espn_api/%d.csv' %(proj_dict, year, ),
                      usecols=['id', 'away_abbreviation', 'home_abbreviation', 'season_year',
                               'away_score', 'home_score', 'season_type', 'date'])
     print year
@@ -169,10 +172,11 @@ data['away_away_last_9_pct'] = data.apply(lambda x: get_last_N_game_result(x['aw
 data['away_away_last_10_pct'] = data.apply(lambda x: get_last_N_game_result(x['away_abbreviation'], x['season_type'],
                                                                              x['season_year'], x['date'], last_n = 10,
                                                                              game_type = 'away') , axis=1)
-# result_list = data[['id', 'home_total_strk', 'away_total_strk', 'home_home_strk', 'away_away_strk']].T.to_dict().values()
-# result_dict = {}
-# for i in result_list:
-#     result_dict[i['id']] = dict(filter(lambda x: x[0] != 'id', i.items()))
-#
-# with open('strk_result.json', 'w') as fp:
-#     json.dump(result_dict, fp)
+
+result_list = data[filter(lambda x: '_pct' in x, data.columns.tolist()) + ['id']].T.to_dict().values()
+result_dict = {}
+for i in result_list:
+    result_dict[i['id']] = dict(filter(lambda x: x[0] != 'id', i.items()))
+
+with open('last_n_result.json', 'w') as fp:
+    json.dump(result_dict, fp)

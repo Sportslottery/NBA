@@ -1,5 +1,6 @@
 __author__ = 'Shane_Kao'
 
+import os
 import time
 import json
 from datetime import datetime
@@ -8,9 +9,9 @@ import numpy as np
 import pandas as pd
 
 data = pd.DataFrame()
-
+proj_dict = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 for year in range(2006, 2017):
-    api_df = pd.read_csv('F:/NBA/crawler/data/espn_api/%d.csv' %(year, ),
+    api_df = pd.read_csv('%s/crawler/data/espn_api/%d.csv' %(proj_dict, year, ),
                      usecols=['id', 'away_abbreviation', 'home_abbreviation', 'season_year',
                               'away_score', 'home_score', 'season_type', 'date'])
     print year
