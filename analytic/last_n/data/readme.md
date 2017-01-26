@@ -5,6 +5,6 @@
 `two_way_winner`: 勝隊  
 `handicap_winner`: 讓分盤勝隊  
 `over_under_result`: 大小分結果  
-`home_total_last_n_pct`: 主隊最近 N 場勝率
-`home_home_last_n_pct`: 主隊主場最近 N 場勝率
-`away_away_last_n_pct`: 客隊客場最近 N 場勝率
+`home_total_last_n_pct`: 主隊最近 N 場勝率  
+`home_home_last_n_pct`: 主隊主場最近 N 場勝率  
+`away_away_last_n_pct`: 客隊客場最近 N 場勝率  
