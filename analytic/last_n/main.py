@@ -4,8 +4,8 @@ import os
 import json
 
 import pandas as pd
-proj_dict = 'F:/NBA'
-# proj_dict = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+# proj_dict = 'F:/NBA'
+proj_dict = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 last_n_dict = json.load(open(proj_dict + '/analytic/last_n/last_n_result.json', 'r'))
 col_names = [u'home_total_last_4_pct',
  u'home_home_last_4_pct',
