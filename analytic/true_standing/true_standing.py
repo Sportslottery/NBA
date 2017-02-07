@@ -46,3 +46,19 @@ api_df['away_away_pct'] = np.where(api_df['away_away_pct'].isnull(), 0.5,
                            np.where(api_df['away_away_pct'] > best_away_winning_pct, best_away_winning_pct,
                            np.where(api_df['away_away_pct'] < worst_away_winning_pct, worst_away_winning_pct,
                                     api_df['away_away_pct'])))
+
+
+
+api_df['home_total_winning_score'] = np.where(api_df['two_way_winner'] == 'home', api_df['away_total_pct']/(1 - api_df['away_total_pct']),
+         -1 * (1 - api_df['away_total_pct'])/api_df['away_total_pct'])
+
+api_df['away_total_winning_score'] = np.where(api_df['two_way_winner'] == 'away', api_df['home_total_pct']/(1 - api_df['home_total_pct']),
+         -1 * (1 - api_df['home_total_pct'])/api_df['home_total_pct'])
+
+api_df['home_home_winning_score'] = np.where(api_df['two_way_winner'] == 'home',
+                                             api_df['away_away_pct']/(1 - api_df['away_away_pct']),
+                                             -1 * (1 - api_df['away_away_pct'])/api_df['away_away_pct'])
+
+api_df['away_away_winning_score'] = np.where(api_df['two_way_winner'] == 'away',
+                                             api_df['home_home_pct']/(1 - api_df['home_home_pct']),
+                                             -1 * (1 - api_df['home_home_pct'])/api_df['home_home_pct'])
