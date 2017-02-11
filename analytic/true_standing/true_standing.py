@@ -146,39 +146,43 @@ def get_last_N_game_score(team_name, season_type, season_year, date, last_n=10, 
     else:
         if game_type == 'total':
             total_score = np.where(df['away_abbreviation'] == team_name, df['away_total_winning_score'],
-                             df['home_total_winning_score'])
+                             df['home_total_winning_score']).sum()
             lastN_score = np.where(df['away_abbreviation'] == team_name, df['lastN_away_total_winning_score'],
-                             df['lastN_home_total_winning_score'])
+                             df['lastN_home_total_winning_score']).sum()
         if game_type == 'home':
-            total_score = df['home_home_winning_score'].tolist()
-            lastN_score = df['lastN_home_home_winning_score'].tolist()
+            total_score = sum(df['home_home_winning_score'].tolist())
+            lastN_score = sum(df['lastN_home_home_winning_score'].tolist())
         if game_type == 'away':
-            total_score = df['away_away_winning_score'].tolist()
-            lastN_score = df['lastN_away_away_winning_score'].tolist()
+            total_score = sum(df['away_away_winning_score'].tolist())
+            lastN_score = sum(df['lastN_away_away_winning_score'].tolist())
         score_dict = {'total': total_score, 'lastN': lastN_score}
     return score_dict
+data['away_total'] = [0 for i in range(data.shape[0])]
+data['away_total_lastN'] = [0 for i in range(data.shape[0])]
+data['away_away'] = [0 for i in range(data.shape[0])]
+data['away_away_lastN'] = [0 for i in range(data.shape[0])]
 
+data['home_total'] = [0 for i in range(data.shape[0])]
+data['home_total_lastN'] = [0 for i in range(data.shape[0])]
+data['home_home'] = [0 for i in range(data.shape[0])]
+data['home_home_lastN'] = [0 for i in range(data.shape[0])]
 
-
-
-for i in range(data.shape):
+for i in range(data.shape[0]):
     away_team_name = data.loc[i, 'away_abbreviation']
     home_team_name = data.loc[i, 'home_abbreviation']
     season_type = data.loc[i, 'season_type']
     season_year = data.loc[i, 'season_year']
     date = data.loc[i, 'date']
-    away_total_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=10, game_type ='total')
-    away_away_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=10, game_type ='away')
-    home_total_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=10, game_type ='total')
-    home_home_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=10, game_type ='home')
-
-
-
-data['away_total_last_1']
-data['away_away_last_1']
-data['away_lastN_last_1']
-
-data['home_total_last_1']
-data['home_home_last_1']
-data['home_lastN_last_1']
+    away_total_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=5, game_type ='total')
+    away_away_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=5, game_type ='away')
+    home_total_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=5, game_type ='total')
+    home_home_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=5, game_type ='home')
+    data.loc[i, 'away_total'] = away_total_score_dict.get('total', 0)
+    data.loc[i, 'away_total_lastN'] = away_total_score_dict.get('lastN', 0)
+    data.loc[i, 'away_away'] = away_away_score_dict.get('total', 0)
+    data.loc[i, 'away_away_lastN'] = away_away_score_dict.get('lastN', 0)
+    data.loc[i, 'home_total'] = home_total_score_dict.get('total', 0)
+    data.loc[i, 'home_total_lastN'] = home_total_score_dict.get('lastN', 0)
+    data.loc[i, 'home_home'] = home_home_score_dict.get('total', 0)
+    data.loc[i, 'home_home_lastN'] = home_home_score_dict.get('lastN', 0)
 
