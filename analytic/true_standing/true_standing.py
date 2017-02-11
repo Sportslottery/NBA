@@ -120,7 +120,7 @@ data = pd.DataFrame()
 for year in range(2006, 2017):
     api_df = pd.read_csv('%s/crawler/data/espn_api/%d.csv' %(proj_dict, year, ),
                      usecols=['id', 'away_abbreviation', 'home_abbreviation', 'season_year',
-                              'away_score', 'home_score', 'season_type', 'date'])
+                              'season_type', 'date'])
     print year
     data = data.append(api_df)
 
@@ -131,4 +131,54 @@ data['date'] = map(lambda x: time.mktime(datetime.strptime(x, '%Y-%m-%dT%H:%MZ')
 # data['two_way_winner'] = np.where(data['away_score'] > data['home_score'], data['away_abbreviation'], data['home_abbreviation'])
 
 data = pd.merge(data, true_standing_df, on='id', how='left')
+
+def get_last_N_game_score(team_name, season_type, season_year, date, last_n=10, game_type ='total'):
+    if game_type == 'total':
+        cond = (data['away_abbreviation'] == team_name) | (data['home_abbreviation'] == team_name)
+    elif game_type == 'home':
+        cond = data['home_abbreviation'] == team_name
+    else:
+        cond = data['away_abbreviation'] == team_name
+
+    df = data[cond][(data['season_type'] == season_type) & (data['season_year'] == season_year)][data['date'] < date].tail(last_n)
+    if df.shape[0] == 0:
+        score_dict = {}
+    else:
+        if game_type == 'total':
+            total_score = np.where(df['away_abbreviation'] == team_name, df['away_total_winning_score'],
+                             df['home_total_winning_score'])
+            lastN_score = np.where(df['away_abbreviation'] == team_name, df['lastN_away_total_winning_score'],
+                             df['lastN_home_total_winning_score'])
+        if game_type == 'home':
+            total_score = df['home_home_winning_score'].tolist()
+            lastN_score = df['lastN_home_home_winning_score'].tolist()
+        if game_type == 'away':
+            total_score = df['away_away_winning_score'].tolist()
+            lastN_score = df['lastN_away_away_winning_score'].tolist()
+        score_dict = {'total': total_score, 'lastN': lastN_score}
+    return score_dict
+
+
+
+
+for i in range(data.shape):
+    away_team_name = data.loc[i, 'away_abbreviation']
+    home_team_name = data.loc[i, 'home_abbreviation']
+    season_type = data.loc[i, 'season_type']
+    season_year = data.loc[i, 'season_year']
+    date = data.loc[i, 'date']
+    away_total_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=10, game_type ='total')
+    away_away_score_dict = get_last_N_game_score(away_team_name, season_type, season_year, date, last_n=10, game_type ='away')
+    home_total_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=10, game_type ='total')
+    home_home_score_dict = get_last_N_game_score(home_team_name, season_type, season_year, date, last_n=10, game_type ='home')
+
+
+
+data['away_total_last_1']
+data['away_away_last_1']
+data['away_lastN_last_1']
+
+data['home_total_last_1']
+data['home_home_last_1']
+data['home_lastN_last_1']
 
