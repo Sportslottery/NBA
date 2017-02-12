@@ -186,3 +186,18 @@ for i in range(data.shape[0]):
     data.loc[i, 'home_home'] = home_home_score_dict.get('total', 0)
     data.loc[i, 'home_home_lastN'] = home_home_score_dict.get('lastN', 0)
 
+for year in range(2007, 2017):
+    df = pd.read_csv('%s/analytic/standing/data/%d.csv' %(proj_dict, year, ))
+    if 'handicap_winner' in list(df.columns):
+        df = df[['id', 'season_type', 'two_way_winner', 'handicap_winner', 'over_under_result',
+             'home_line_margin', 'over_under']]
+    else:
+        df = df[['id', 'season_type', 'two_way_winner', 'over_under_result',
+             'home_line_margin', 'over_under']]
+
+
+    df = pd.merge(df, data.loc[:, ['id', u'away_total',               u'away_total_lastN',
+                            u'away_away',                u'away_away_lastN',
+                           u'home_total',               u'home_total_lastN',
+                            u'home_home',                u'home_home_lastN']], on='id', how='left')
+    df.to_csv(proj_dict + '/analytic/true_standing/data/' + '%d.csv' %year, index=None)
