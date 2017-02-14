@@ -196,7 +196,7 @@ for year in range(2007, 2017):
              'home_line_margin', 'over_under']]
 
 
-    df = pd.merge(df, data.loc[:, ['id', u'away_total',               u'away_total_lastN',
+    df = pd.merge(df, data.loc[:, ['id', u'away_total',          u'away_total_lastN',
                             u'away_away',                u'away_away_lastN',
                            u'home_total',               u'home_total_lastN',
                             u'home_home',                u'home_home_lastN']], on='id', how='left')
