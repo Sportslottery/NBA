@@ -19,3 +19,5 @@ for year in range(2006, 2017):
                               'away_score', 'home_score', 'season_type', 'date'])
     print year
     data = data.append(api_df)
+
+data['date'] = data['date'].apply(lambda x: datetime.strptime(x[:10], '%Y-%m-%d'))
