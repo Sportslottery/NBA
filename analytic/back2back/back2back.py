@@ -27,10 +27,27 @@ def back2back(team_name, date):
     df = df[df['date'] == date - timedelta(days=1)]
     return df.shape[0]
 
-home_b2b = away_b2b = []
+home_b2b = []
+away_b2b = []
 for i in range(data.shape[0]):
+    print i, data.shape[0]
     home_b2b.append(back2back(data.iloc[i]['home_abbreviation'], data.iloc[i]['date']))
     away_b2b.append(back2back(data.iloc[i]['away_abbreviation'], data.iloc[i]['date']))
 
 data['home_b2b'] = home_b2b
 data['away_b2b'] = away_b2b
+
+for year in range(2007, 2017):
+    df = pd.read_csv('%s/analytic/standing/data/%d.csv' %(proj_dict, year, ))
+    if 'handicap_winner' in list(df.columns):
+        df = df[['id', 'season_type', 'two_way_winner', 'handicap_winner', 'over_under_result',
+             'home_line_margin', 'over_under']]
+    else:
+        df = df[['id', 'season_type', 'two_way_winner', 'over_under_result',
+             'home_line_margin', 'over_under']]
+
+    df = pd.merge(df, data.loc[:, ['id', u'home_b2b', u'away_b2b']], on='id', how='left')
+
+
+    df.to_csv(proj_dict + '/analytic/back2back/data/' + '%d.csv' %year, index=None)
+    print year
