@@ -45,9 +45,9 @@ class EspnBoxscoreData(object):
         tot = len(id_list)
         result_list = []
         for index, element in enumerate(id_list):
+            print index, tot, element
             result_dict = self.get_espn_boxscore_data(element)
             result_list.append(result_dict)
-            print index, tot, element
         result_df = pd.DataFrame(result_list)
         if month:
             file_name = self.data_path + 'espn_boxscore/%d%02d.csv' %(year, month, )
@@ -58,5 +58,12 @@ class EspnBoxscoreData(object):
 if __name__ == "__main__":
     # TOV RB
     EBD = EspnBoxscoreData()
-    EBD.main(year=2017, month=1)
-
+    # EBD.main(year=2014)
+    # EBD.main(year=2013)
+    # EBD.main(year=2012)
+    # EBD.main(year=2011)
+    # EBD.main(year=2010)
+    # EBD.main(year=2009)
+    # EBD.main(year=2008)
+    # EBD.main(year=2007)
+    EBD.main(year=2006)
