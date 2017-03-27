@@ -4,6 +4,6 @@
 `over_under`: 大小分盤口  
 `two_way_winner`: 勝隊  
 `handicap_winner`: 讓分盤勝隊  
-`over_under_result`: 大小分結果 
-`home_matchup_result`: 主隊該賽季該賽制與客隊對戰組合結果  
+`over_under_result`: 大小分結果  
+`home_matchup_result`: 主隊該賽季該賽制與客隊對戰組合結果 
 > -1 落後一場 0 平手或無對戰紀錄 1 領先一場
