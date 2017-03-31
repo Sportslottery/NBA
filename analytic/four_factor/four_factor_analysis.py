@@ -60,6 +60,21 @@ def get_last_N_game_four_factor(team_name, season_type, season_year, date, last_
             result_dict['defensive_ftfga_last%d' %(ln, )] = None
     else:
         if game_type == 'total':
+            offensive_ftm_cnt = np.where(df['home_abbreviation'] == team_name, df['home_FTM'],
+                                        df['away_FTM']).tolist()
+            defensive_ftm_cnt = np.where(df['home_abbreviation'] == team_name, df['away_FTM'],
+                                        df['home_FTM']).tolist()
+
+            offensive_tov_cnt = np.where(df['home_abbreviation'] == team_name, df['home_TO'],
+                                        df['away_TO']).tolist()
+            defensive_tov_cnt = np.where(df['home_abbreviation'] == team_name, df['away_TO'],
+                                        df['home_TO']).tolist()
+
+            offensive_fta_cnt = np.where(df['home_abbreviation'] == team_name, df['home_FTA'],
+                                        df['away_FTA']).tolist()
+            defensive_fta_cnt = np.where(df['home_abbreviation'] == team_name, df['away_FTA'],
+                                        df['home_FTA']).tolist()
+
             offensive_fg_cnt = np.where(df['home_abbreviation'] == team_name, df['home_FGM'],
                                         df['away_FGM']).tolist()
             defensive_fg_cnt = np.where(df['home_abbreviation'] == team_name, df['away_FGM'],
@@ -76,29 +91,66 @@ def get_last_N_game_four_factor(team_name, season_type, season_year, date, last_
                 _offensive_fg_cnt = sum(offensive_fg_cnt[-ln:])
                 _offensive_3p_cnt = sum(offensive_3p_cnt[-ln:])
                 _offensive_fga_cnt = sum(offensive_fga_cnt[-ln:])
+                _offensive_tov_cnt = sum(offensive_tov_cnt[-ln:])
+                _offensive_fta_cnt = sum(offensive_fta_cnt[-ln:])
+                _offensive_ftm_cnt = sum(offensive_ftm_cnt[-ln:])
                 _defensive_fg_cnt = sum(defensive_fg_cnt[-ln:])
                 _defensive_3p_cnt = sum(defensive_3p_cnt[-ln:])
                 _defensive_fga_cnt = sum(defensive_fga_cnt[-ln:])
+                _defensive_tov_cnt = sum(defensive_tov_cnt[-ln:])
+                _defensive_fta_cnt = sum(defensive_fta_cnt[-ln:])
+                _defensive_ftm_cnt = sum(defensive_ftm_cnt[-ln:])
+                result_dict['offensive_ftfga_last%d' %(ln, )] = \
+                    float(_offensive_ftm_cnt) / _offensive_fga_cnt
+                result_dict['defensive_ftfga_last%d' %(ln, )] = \
+                    float(_defensive_ftm_cnt) / _defensive_fga_cnt
+
                 result_dict['offensive_efg_last%d' %(ln, )] = \
                     float(_offensive_fg_cnt + 0.5 * _offensive_3p_cnt) / _offensive_fga_cnt
                 result_dict['defensive_efg_last%d' %(ln, )] = \
                     float(_defensive_fg_cnt + 0.5 * _defensive_3p_cnt) / _defensive_fga_cnt
+                result_dict['offensive_tov_last%d' %(ln, )] = \
+                    float(_offensive_tov_cnt) / (_offensive_fga_cnt + _offensive_tov_cnt +
+                                                 0.44 * _offensive_fta_cnt)
+                result_dict['defensive_tov_last%d' %(ln, )] = \
+                    float(_defensive_tov_cnt) / (_defensive_fga_cnt + _defensive_tov_cnt +
+                                                 0.44 * _defensive_fta_cnt)
         else:
             for ln in range(1, 11):
                 _offensive_fg_cnt = sum(df['%s_FGM' %(game_type, )][-ln:])
                 _offensive_3p_cnt = sum(df['%s_3PM' %(game_type, )][-ln:])
                 _offensive_fga_cnt = sum(df['%s_FGA' %(game_type, )][-ln:])
+                _offensive_tov_cnt = sum(df['%s_TO' %(game_type, )][-ln:])
+                _offensive_fta_cnt = sum(df['%s_FTA' %(game_type, )][-ln:])
+                _offensive_ftm_cnt = sum(df['%s_FTM' %(game_type, )][-ln:])
 
                 _defensive_fg_cnt = sum(df['%s_FGM' %(defensive_game_type_dict[game_type], )][-ln:])
                 _defensive_3p_cnt = sum(df['%s_3PM' %(defensive_game_type_dict[game_type], )][-ln:])
                 _defensive_fga_cnt = sum(df['%s_FGA' %(defensive_game_type_dict[game_type], )][-ln:])
+                _defensive_tov_cnt = sum(df['%s_TO' %(defensive_game_type_dict[game_type], )][-ln:])
+                _defensive_fta_cnt = sum(df['%s_FTA' %(defensive_game_type_dict[game_type], )][-ln:])
+                _defensive_ftm_cnt = sum(df['%s_FTM' %(defensive_game_type_dict[game_type], )][-ln:])
+
                 result_dict['offensive_efg_last%d' %(ln, )] = \
                     float(_offensive_fg_cnt + 0.5 * _offensive_3p_cnt) / _offensive_fga_cnt
                 result_dict['defensive_efg_last%d' %(ln, )] = \
                     float(_defensive_fg_cnt + 0.5 * _defensive_3p_cnt) / _defensive_fga_cnt
+
+                result_dict['offensive_tov_last%d' %(ln, )] = \
+                    float(_offensive_tov_cnt) / (_offensive_fga_cnt + _offensive_tov_cnt +
+                                                 0.44 * _offensive_fta_cnt)
+                result_dict['defensive_tov_last%d' %(ln, )] = \
+                    float(_defensive_tov_cnt) / (_defensive_fga_cnt + _defensive_tov_cnt +
+                                                 0.44 * _defensive_fta_cnt)
+
+                result_dict['offensive_ftfga_last%d' %(ln, )] = \
+                    float(_offensive_ftm_cnt) / _offensive_fga_cnt
+                result_dict['defensive_ftfga_last%d' %(ln, )] = \
+                    float(_defensive_ftm_cnt) / _defensive_fga_cnt
+
     return result_dict
 
 
 get_last_N_game_four_factor(team_name='LAC', season_type=2, season_year=2017,
-                            date=1483203600, last_n=10, game_type='away')
+                            date=1483203600, last_n=10, game_type='home')
 
