@@ -27,6 +27,7 @@ for year in range(2006, 2017):
 for year in range(2006, 2017):
     api_df = pd.read_csv('%s/crawler/data/espn_boxscore/%d.csv' %(proj_dict, year, ))
     print year
+    api_df = api_df.replace('--', np.nan)
     data2 = data2.append(api_df)
 
 data1.reset_index(inplace=True, drop=True)
@@ -37,7 +38,11 @@ data = pd.merge(data1, data2, on='id', how='left')
 data['date'] = map(lambda x: time.mktime(datetime.strptime(x, '%Y-%m-%dT%H:%MZ').timetuple()),
                     data['date'].tolist())
 
+data['away_DREB'] = data['away_DREB'].apply(lambda x: x if pd.isnull(x) else int(x))
+data['away_OREB'] = data['away_OREB'].apply(lambda x: x if pd.isnull(x) else int(x))
+data['away_TO'] = data['away_TO'].apply(lambda x: x if pd.isnull(x) else int(x))
 
+data = data.fillna(data.mean())
 
 defensive_game_type_dict = {'home': 'away', 'away': 'home'}
 def get_last_N_game_four_factor(team_name, season_type, season_year, date, last_n=10, game_type ='total'):
@@ -50,7 +55,6 @@ def get_last_N_game_four_factor(team_name, season_type, season_year, date, last_
         cond = data['away_abbreviation'] == team_name
     df = data[cond][(data['season_type'] == season_type) &
                     (data['season_year'] == season_year)][data['date'] < date].tail(last_n)
-
     if df.shape[0] == 0:
         for ln in range(1, 11):
             result_dict['offensive_efg_last%d' %(ln, )] = None
@@ -193,6 +197,12 @@ df = data.loc[:, ['id', 'date', 'season_type', 'season_year', 'away_abbreviation
 result_list = df.T.to_dict().values()
 
 
+get_last_N_game_four_factor(team_name='LAC',
+                                             season_type=2,
+                                             season_year=2016,
+                                             date=1160578800,
+                                             last_n=10,
+                                             game_type='total')
 
 for j ,i in enumerate(result_list[:]):
     print j, len(result_list)
@@ -228,5 +238,18 @@ for j ,i in enumerate(result_list[:]):
     i.update(away_total)
     i.update(home_home)
     i.update(away_away)
+#
+four_factor_df = pd.DataFrame(result_list)
 
-pd.DataFrame(result_list[:10])
+for year in range(2007, 2017):
+    df1 = pd.read_csv('%s/analytic/standing/data/%d.csv' %(proj_dict, year, ))
+    df1 = df1.loc[:, ['id', 'two_way_winner', 'handicap_winner', 'over_under_result',
+                      'home_line_margin', 'over_under']]
+    df2 = four_factor_df
+    df2 = df2[['id'] + filter(lambda x: '_last' in x, df2.columns.tolist())]
+    df1.reset_index(inplace=True, drop=True)
+    df2.reset_index(inplace=True, drop=True)
+    df = pd.merge(df1, df2, on='id', how='left')
+    #
+    df.to_csv('F:/NBA/analytic/four_factor' + '/data/' + '%d.csv' %year, index=None)
+    print year
