@@ -243,7 +243,7 @@ four_factor_df = pd.DataFrame(result_list)
 
 for year in range(2007, 2017):
     df1 = pd.read_csv('%s/analytic/standing/data/%d.csv' %(proj_dict, year, ))
-    df1 = df1.loc[:, ['id', 'two_way_winner', 'handicap_winner', 'over_under_result',
+    df1 = df1.loc[:, ['id', 'season_type', 'two_way_winner', 'handicap_winner', 'over_under_result',
                       'home_line_margin', 'over_under']]
     df2 = four_factor_df
     df2 = df2[['id'] + filter(lambda x: '_last' in x, df2.columns.tolist())]
